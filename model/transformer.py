@@ -9,7 +9,7 @@ from torch.nn import Module
 import utils
 from . import encoders
 from .layer import TransformerEncoderLayer, PerFeatureEncoderLayer
-from utils import SeqBN, bool_mask_to_att_mask, mean_nested_structures, print_once
+from FairPFN.utils import SeqBN, bool_mask_to_att_mask, mean_nested_structures, print_once
 
 
 def make_decoder_dict(decoder_description_dict, ninp, nhid):

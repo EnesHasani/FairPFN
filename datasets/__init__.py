@@ -13,15 +13,15 @@ import warnings
 from sklearn.model_selection import StratifiedKFold, KFold
 from scipy.sparse._csr import csr_matrix
 from typing import Optional, Union, Literal, List
-from aif360.sklearn.datasets import fetch_adult, fetch_bank, fetch_compas, fetch_german, fetch_lawschool_gpa, fetch_meps
-from fairlearn.datasets import _fetch_boston, _fetch_credit_card, _fetch_diabetes_hospital, _fetch_acs_income
-import dowhy.datasets
+# from aif360.sklearn.datasets import fetch_adult, fetch_bank, fetch_compas, fetch_german, fetch_lawschool_gpa, fetch_meps
+# from fairlearn.datasets import _fetch_boston, _fetch_credit_card, _fetch_diabetes_hospital, _fetch_acs_income
+# import dowhy.datasets
 import pickle as pkl
-from dowhy import CausalModel
-from IPython.display import Image, display
-from IPython.display import clear_output
+# from dowhy import CausalModel
+# from IPython.display import Image, display
+# from IPython.display import clear_output
 
-from dowhy import CausalModel
+# from dowhy import CausalModel
 import networkx as nx
 import openml
 from sklearn.ensemble import GradientBoostingRegressor
@@ -207,7 +207,7 @@ class TabularDataset:
             if n_splits is None:
                 raise ValueError("If `splits` is None, `n_splits` must be set.")
             # lazy import as not needed elsewhere.
-            from utils import get_cv_split_for_data
+            from FairPFN.utils import get_cv_split_for_data
 
             # assume torch tensor as nothing else possible according to typing.
             x = self.x if isinstance(self.x, np.ndarray) else self.x.numpy()
@@ -627,7 +627,7 @@ def load_causal_casestudies(n_max: int = 30, sel=True):
     print('\n########### Causal Case Studies ###########')
 
     for casestudy in causal_casestudies:
-        data_path = Path('/work/dlclarge2/robertsj-fairpfn/prior-fitting/data/causal/casestudies') / casestudy
+        data_path = Path(__file__).parent.parent / 'data' / 'causal' / 'casestudies' / casestudy
         for i in tqdm.tqdm(range(n_max), desc=f'{get_pretty_name(casestudy)} Benchmarks'):
             with open(str(data_path) + f'/{casestudy}_{i}.pkl', 'rb') as f:
                 casestudy_benchmarks.append(pkl.load(f))
@@ -635,26 +635,26 @@ def load_causal_casestudies(n_max: int = 30, sel=True):
     print('\n########### Causal Case Studies (Counterfactual) ###########')
 
     for casestudy in cntf_casestudies:
-        data_path = Path('/work/dlclarge2/robertsj-fairpfn/prior-fitting/data/causal/casestudies') / casestudy
+        data_path = Path(__file__).parent.parent / 'data' / 'causal' / 'casestudies' / casestudy
         for i in tqdm.tqdm(range(n_max), desc=f'{get_pretty_name(casestudy)} Benchmarks'):
             with open(str(data_path) + f'/{casestudy}_{i}.pkl', 'rb') as f:
                 casestudy_benchmarks.append(pkl.load(f))
 
-    print('\n########### Real-World Data ###########')
+    # print('\n########### Real-World Data ###########')
 
-    for casestudy in single_casestudies:
-        print(f'{get_pretty_name(casestudy)}')
-        data_path = Path('/work/dlclarge2/robertsj-fairpfn/prior-fitting/data/causal/casestudies') / casestudy
-        with open(str(data_path) + f'/{casestudy}.pkl', 'rb') as f:
-            casestudy_benchmarks.append(pkl.load(f))
+    # for casestudy in single_casestudies:
+    #     print(f'{get_pretty_name(casestudy)}')
+    #     data_path = Path(__file__).parent.parent / 'data' / 'causal' / 'casestudies' / casestudy
+    #     with open(str(data_path) + f'/{casestudy}.pkl', 'rb') as f:
+    #         casestudy_benchmarks.append(pkl.load(f))
 
-    print('\n########### Real-World Data (Counterfactual) ###########')
+    # print('\n########### Real-World Data (Counterfactual) ###########')
 
-    for casestudy in single_casestudies_cntf:
-        print(f'{get_pretty_name(casestudy)}')
-        data_path = Path('/work/dlclarge2/robertsj-fairpfn/prior-fitting/data/causal/casestudies') / casestudy
-        with open(str(data_path) + f'/{casestudy}.pkl', 'rb') as f:
-            casestudy_benchmarks.append(pkl.load(f))
+    # for casestudy in single_casestudies_cntf:
+    #     print(f'{get_pretty_name(casestudy)}')
+    #     data_path = Path(__file__).parent.parent / 'data' / 'causal' / 'casestudies' / casestudy
+    #     with open(str(data_path) + f'/{casestudy}.pkl', 'rb') as f:
+    #         casestudy_benchmarks.append(pkl.load(f))
 
     print('\n########### Loading FairPFN Model ###########')
 

@@ -34,7 +34,7 @@ def causal_fairness_total_effect(target=None, pred=None, x=None, prot_attr=None,
     print("df['df'].columns", dowhy_data['df'].columns)
     print("x.shape", x.shape)
 '''
-    
+
 def causal_fairness_direct_effect(target=None, pred=None, x=None, prot_attr=None, dowhy_data=None, name=None):
     if "Direct" not in name:
         return 0

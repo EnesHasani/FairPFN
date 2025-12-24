@@ -1,5 +1,6 @@
 from dataclasses import dataclass, asdict
 import dataclasses
+import os
 import typing as tp
 import torch
 
@@ -22,7 +23,7 @@ class Checkpoint:
 
     @classmethod
     def load(cls, path: str) -> "Checkpoint":
-        checkpoint: tp.Dict[str, tp.Any] = torch.load(path, map_location="cpu")
+        checkpoint: tp.Dict[str, tp.Any] = torch.load(path, map_location="cpu", weights_only=False)
         # this is here for backwards compatibility
         if "trained_epochs_until_now" not in checkpoint:
             checkpoint["trained_epochs_until_now"] = checkpoint["config"][
@@ -67,7 +68,9 @@ def load_model(
         checkpoint.config = {**checkpoint.config, **overwrite_config_keys}
 
     import pickle as pkl
-    with open('artifacts/fairpfn_model.pkl', 'rb') as f:
+    file_path = os.path.join(os.path.dirname(__file__), '../../artifacts/fairpfn_model.pkl')
+
+    with open(file_path, 'rb') as f:
         model = pkl.load(f)
 
     model.load_state_dict(checkpoint.state_dict)

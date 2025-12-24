@@ -1,6 +1,6 @@
 import typing as tp
 
-from utils import print_once
+from FairPFN.utils import print_once
 
 import torch
 from torch import nn

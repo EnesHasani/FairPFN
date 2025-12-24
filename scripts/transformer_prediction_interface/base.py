@@ -9,8 +9,8 @@ from copy import copy
 import math
 import os
 
-import utils
-from utils import normalize_data, print_once, NOP, to_tensor
+from FairPFN import utils
+from FairPFN.utils import normalize_data, print_once, NOP, to_tensor
 from sklearn.utils.validation import check_X_y
 from sklearn.preprocessing import LabelEncoder
 from sklearn.utils.multiclass import unique_labels
@@ -46,9 +46,9 @@ from sklearn.utils import (
     check_consistent_length,
 )
 from .configs import PreprocessorConfig, get_params_from_config
-from model.bar_distribution import FullSupportBarDistribution
+from FairPFN.model.bar_distribution import FullSupportBarDistribution
 
-from model.encoders import ProtAttrEncoderStep
+from FairPFN.model.encoders import ProtAttrEncoderStep
 
 LOG_MEMORY_USAGE_PATH = None  # Disables logging, could be "/work/dlclarge1/hollmann-PFN_Tabular/memory_usage.csv"
 
@@ -1265,7 +1265,7 @@ class TabPFNBaseModel(BaseEstimator):
             additional_y_eval = {}
 
         # Check is fit had been called
-        check_is_fitted(self)
+        # check_is_fitted(self)
 
         # Input validation
         X_eval = check_array(
@@ -1475,7 +1475,7 @@ class TabPFNBaseModel(BaseEstimator):
             batch_label,
             batch_categorical_inds,
             batch_additional_ys,
-        ) in tqdm.auto.tqdm(
+        ) in tqdm.tqdm(
             list(zip(inputs, labels, categorical_inds, additional_ys_inputs)),
             desc="Running inference",
             disable=not self.show_progress,
@@ -2086,9 +2086,16 @@ class TabPFNClassifier(TabPFNBaseModel, ClassifierMixin):
 
 class FairPFNClassifier(TabPFNClassifier):
     def __init__(self):
-
-        with open('artifacts/fairpfn_config.pkl', 'rb') as f:
+        file_path = os.path.join(os.path.dirname(__file__), '../../artifacts/fairpfn_config.pkl')
+        with open(file_path, 'rb') as f:
             config = pkl.load(f)
+            mode_string = os.path.abspath(
+                os.path.join(
+                    os.path.dirname(__file__),
+                    '../../results/models_diff/model_submitit_0c_id_e3e764c1_epoch_-1.cpkt',
+                )
+            )
+            config.paths_config.model_strings = [mode_string]
 
         super().__init__(**config.to_kwargs())
 

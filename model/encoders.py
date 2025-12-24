@@ -4,9 +4,8 @@ from abc import ABCMeta, abstractmethod
 import torch
 import torch.nn as nn
 
-import utils
-from utils import normalize_data, to_ranking_low_mem, remove_outliers
-from utils import torch_nanmean
+from FairPFN.utils import normalize_data, to_ranking_low_mem, remove_outliers
+from FairPFN.utils import torch_nanmean
 
 
 class InputEncoder(nn.Module):
